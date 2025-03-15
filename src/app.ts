@@ -1,29 +1,30 @@
-import express, { Request, Response } from 'express';
-
+import express from 'express';
+import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-dotenv.config();
+import bodyParser from 'body-parser';
+import router from './routes/destination.routes';
 
-const PORT = process.env.PORT || 3000;
+// Cargar variables de entorno
+//dotenv.config({ path: '.env' });
 
 const app = express();
+app.use(bodyParser.json());
 
-// Middleware para manejar JSON
-app.use(express.json());
+mongoose
+  .connect(process.env.DATABASE_URL!, {
+    dbName: process.env.MONGO_DB_NAME!,
+    authSource: 'admin',
+  })
+  .then(() => {
+    console.log('✅ Conectado a MongoDB');
+  })
+  .catch((err) => {
+    console.error('❌ Error conectando a MongoDB:', err);
+  });
 
-// Rutas de ejemplo
-app.get('/', (req: Request, res: Response) => {
-  res.send('¡Bienvenido a la API de Travel!');
-});
+app.use('/destinations', router);
 
-app.get('/api/v1/destinos', (req: Request, res: Response) => {
-  res.json([
-    { id: 1, name: 'Ciudad de México' },
-    { id: 2, name: 'Medellín' },
-    { id: 3, name: 'Buenos Aires' },
-  ]);
-});
-
-// Inicia el servidor
-app.listen(PORT, () => {
-  console.log(`Servidor corriendo en http://localhost:${PORT}`);
+const port = process.env.PORT || 3002;
+app.listen(port, () => {
+  console.log(`🚀 Servidor corriendo en el puerto ${port}`);
 });
