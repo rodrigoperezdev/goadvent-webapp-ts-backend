@@ -2,14 +2,30 @@ import mongoose, { Schema, Document } from 'mongoose';
 
 export interface IDestination extends Document {
   title: string;
+  thumbnailImgUrl: string;
+  fullImgUrl: string;
   description: string;
   price: number;
   duration: string;
   activities: string[];
-  physicalLevel: 'relaxed' | 'moderate' | 'active' | 'intense';
+  physicalLevel:
+    | 'relaxed'
+    | 'moderate'
+    | 'active'
+    | 'intense'
+    | 'mixed options';
   groupSize: number;
   ageLimit: number;
   season: ('winter' | 'spring' | 'summer' | 'fall' | 'all')[];
+  climate:
+    | 'cold'
+    | 'warm'
+    | 'tropical'
+    | 'desert'
+    | 'snow'
+    | 'mountain'
+    | 'moderated hot'
+    | 'super hot';
   includes: string[];
   notIncluded: string[];
   reviews: mongoose.Types.ObjectId[];
@@ -21,13 +37,30 @@ export interface IDestination extends Document {
 const DestinationSchema = new Schema<IDestination>(
   {
     title: { type: String, required: true },
+    thumbnailImgUrl: { type: String, required: false },
+    fullImgUrl: { type: String, required: false },
     description: { type: String, required: true },
     price: { type: Number, required: true },
     duration: { type: String, required: true },
     activities: [{ type: String, required: true }],
     physicalLevel: {
       type: String,
-      enum: ['relaxed', 'moderate', 'active', 'intense'],
+      enum: ['relaxed', 'moderate', 'active', 'intense', 'mixed options'],
+      required: true,
+    },
+    climate: {
+      type: String,
+      enum: [
+        'cold',
+        'warm',
+        'tropical',
+        'desert',
+        'snow',
+        'mountain',
+        'moderated hot',
+        'super hot',
+      ],
+
       required: true,
     },
     groupSize: { type: Number, required: true },
