@@ -2,9 +2,10 @@ import mongoose, { Schema, Document } from 'mongoose';
 
 export interface IDestination extends Document {
   title: string;
+  subTitle: string;
+  description: string;
   thumbnailImgUrl: string;
   fullImgUrl: string;
-  description: string;
   price: number;
   duration: string;
   activities: string[];
@@ -17,7 +18,7 @@ export interface IDestination extends Document {
   groupSize: number;
   ageLimit: number;
   season: ('winter' | 'spring' | 'summer' | 'fall' | 'all')[];
-  climate:
+  climate: (
     | 'cold'
     | 'warm'
     | 'tropical'
@@ -25,7 +26,8 @@ export interface IDestination extends Document {
     | 'snow'
     | 'mountain'
     | 'moderated hot'
-    | 'super hot';
+    | 'super hot'
+  )[];
   includes: string[];
   notIncluded: string[];
   reviews: mongoose.Types.ObjectId[];
@@ -37,6 +39,7 @@ export interface IDestination extends Document {
 const DestinationSchema = new Schema<IDestination>(
   {
     title: { type: String, required: true },
+    subTitle: { type: String, required: true },
     thumbnailImgUrl: { type: String, required: false },
     fullImgUrl: { type: String, required: false },
     description: { type: String, required: true },
@@ -48,8 +51,15 @@ const DestinationSchema = new Schema<IDestination>(
       enum: ['relaxed', 'moderate', 'active', 'intense', 'mixed options'],
       required: true,
     },
+    groupSize: { type: Number, required: true },
+    ageLimit: { type: Number, required: true },
+    season: {
+      type: [String],
+      enum: ['winter', 'spring', 'summer', 'fall', 'all'],
+      required: true,
+    },
     climate: {
-      type: String,
+      type: [String],
       enum: [
         'cold',
         'warm',
@@ -61,13 +71,6 @@ const DestinationSchema = new Schema<IDestination>(
         'super hot',
       ],
 
-      required: true,
-    },
-    groupSize: { type: Number, required: true },
-    ageLimit: { type: Number, required: true },
-    season: {
-      type: [String],
-      enum: ['winter', 'spring', 'summer', 'fall', 'all'],
       required: true,
     },
     includes: [{ type: String, required: true }],

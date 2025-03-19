@@ -2,7 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import bodyParser from 'body-parser';
-import router from './routes/destination.routes';
+import destinationRouter from './routes/destination.routes';
 
 // Cargar variables de entorno
 //dotenv.config({ path: '.env' });
@@ -22,7 +22,7 @@ mongoose
     console.error('❌ Error conectando a MongoDB:', err);
   });
 
-app.use('/destinations', router);
+app.use('/destinations', destinationRouter);
 
 const port = process.env.PORT || 3002;
 app.listen(port, () => {
